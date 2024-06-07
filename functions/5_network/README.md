@@ -1,0 +1,1 @@
+This folder contains all the functions related to the network analysis.

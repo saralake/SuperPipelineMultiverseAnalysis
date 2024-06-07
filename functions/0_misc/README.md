@@ -1,0 +1,1 @@
+This folder contains general functions not related to any major step of the pipeline.
