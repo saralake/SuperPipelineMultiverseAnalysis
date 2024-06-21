@@ -48,3 +48,21 @@ Here there are all the functions related to the connectivity analysis.
 
 ### Functions - 5_network
 Here there are all the functions related to the network analysis.
+
+## Settings
+
+The code is supposed to work out of the box using default parameters, however no parameter is hardcoded but all of them are stored in `functions/0_misc/SPMA_defaultConfig`.
+
+The internal structure of the parameters is a matlab nested struct where the first level is the name of the module, the second the name of the function , and finally the name of the parameter. The full list of default configurations is listed in the following table:
+
+| Module        | Function      | Parameter     | Value |
+| ---           | ---           | ---           | ---   |
+| general       | -             | customConfigFileName | SPMA_config |
+| preprocessing | resample      | Frequency     | 250   |
+| preprocessing | resample      | Save          | false   |
+| preprocessing | filter        | Type          | bandpass   |
+| preprocessing | filter        | LowCutoff     | 0.5   |
+| preprocessing | filter        | HighCutoff    | 48   |
+| preprocessing | filter        | Save          | false   |
+
+

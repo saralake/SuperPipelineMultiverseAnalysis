@@ -1,19 +1,18 @@
-% CHECKDEPENDENCIES - Check if the dependencies required by Super Pipeline
+% SPMA_LOADDEPENDENCIES - Check if the dependencies required by Super Pipeline
 % are already in the Matlab path. If not add to the path the missing ones.
 % The full list of dependencies is:
 %   EEGlab  v.2024.0
 %
 % Usage:
-%     >> checkDependencies;
-%     >> [oldPath newPath] = checkDependencies;
+%     >> SPMA_loadDependencies;
+%     >> [oldPath newPath] = SPMA_loadDependencies;
 %
 % Outputs:
-%    oldPath = [string] Matlab path before the added dependencies
-%    newPath = [string] Matlab path after the added dependencies
+%    errors = [string] List of errors
 %
-% Authors: Alessandro Tonin, 2024
+% Authors: Alessandro Tonin, IRCCS San Camillo Hospital, 2024
 
-function errors = SPMA_checkDependencies()
+function errors = SPMA_loadDependencies()
 
 errors = [];
 

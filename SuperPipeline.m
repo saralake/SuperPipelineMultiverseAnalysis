@@ -20,3 +20,13 @@
 %
 % Last update: 29.05.2024
 
+%% Add internal functions to path
+%%% Uncomment this if you run the whole file
+% folder = fileparts(which(mfilename));
+% functions_folder = fullfile(folder, "functions");
+%%% uncomment this if you run the code line by line
+functions_folder = "functions";
+
+addpath(genpath(functions_folder));
+
+
