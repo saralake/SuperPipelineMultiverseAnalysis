@@ -33,3 +33,9 @@ octave-workspace
 # Dependencies
 dependencies/*
 data/*
+
+# Configuration
+*.json
+
+# Logs
+*.log

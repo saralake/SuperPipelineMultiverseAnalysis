@@ -23,17 +23,27 @@
 
 function config = SPMA_loadConfig(customConfig, opt)
     arguments
-        customConfig struct = struct([])
-        opt.Module string {mustBeMember(opt.Module, ["all", "general", "preprocessing", "headmodel", "source", "sourceestimation", "connectivity", "network"])} = "all"
+        customConfig (1,1) struct = struct()
+        opt.Module (1,1) string {mustBeMember(opt.Module, ["all", "general", "preprocessing", "headmodel", "source", "sourceestimation", "connectivity", "network"])} = "all"
     end
 
+    %Load default config
     config = SPMA_defaultConfig;
 
     % If no custom configuration, use the file defined in default config
-    if isempty(customConfig)
-        customConfig = feval(config.general.customConfigFileName);
+    if isempty(fieldnames(customConfig))
+        % If the file does not exist create a new one with default values
+        customConfigPath = fullfile(config.general.customConfig.FileDir,config.general.customConfig.FileName);
+        if ~exist(customConfigPath, "file")
+            saveConfig(config, customConfigPath)
+        end
+
+        % Load the file
+        customConfig = readConfig(customConfigPath);
+
     end
 
+    % Merge default config with custom config
     config = mergeStruct(config, customConfig);
 
     % Extract only the desired module
@@ -54,3 +64,21 @@ function config = SPMA_loadConfig(customConfig, opt)
 
 end
 
+function saveConfig(c, pth)
+    arguments
+        c struct
+        pth string
+    end
+    c_json = jsonencode(c, "PrettyPrint",true);
+    fid = fopen(pth, "w");
+    fwrite(fid, c_json);
+    fclose(fid);
+end
+
+function c = readConfig(pth)
+    arguments
+        pth string
+    end
+    c_str = fileread(pth);
+    c = jsondecode(c_str);
+end

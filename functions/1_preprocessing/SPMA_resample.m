@@ -26,23 +26,20 @@ function [EEG] = SPMA_resample(EEG, opt)
     end
     
     %% Parsing arguments
-    
+    config_all = SPMA_loadConfig();
+    config = mergeStruct(config_all.preprocessing.resample, opt);
 
-    % DA CAMBIARE
-    config = SPMA_defaultConfig();
-    if isfield(opt, "Frequency")
-        fs = opt.Frequency;
-    else
-        fs = config.preprocessing.resample.Frequency;
-    end
+    %% Logger
+    log = SPMA_loggerSetUp("preprocessing");
     
     %% Resampling
-    fprintf(">>> Resampling \n")
-    fs_old = EEG.srate;
-    fprintf("Old sampling rate: %.1f \n", fs_old)
-    EEG = pop_resample( EEG, fs);
-    fprintf("New sampling rate: %.1f \n", fs)
+    log.log("Resampling")
 
+    fs_old = EEG.srate;
+    log.info(sprintf("Old sampling rate: %.1f", fs_old))
+
+    EEG = pop_resample( EEG, config.fs);
+    log.info(sprintf("New sampling rate: %.1f", fs))
 
 end
 

@@ -29,4 +29,9 @@ functions_folder = "functions";
 
 addpath(genpath(functions_folder));
 
+%% Logger
+
+log = SPMA_loggerSetUp("general");
+
+config = SPMA_loadConfig();
 
