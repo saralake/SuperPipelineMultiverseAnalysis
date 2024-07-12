@@ -22,12 +22,13 @@
 % See also: EEGLAB, POP_EEGFILTNEW
 
 function [EEG] = SPMA_filter(EEG, opt)
-    arguments
+    arguments (Input)
         EEG struct
         opt.Type string {mustBeMember(opt.Type, ["lowpass", "highpass", "bandpass", "bandstop"])}
         opt.LowCutoff double
         opt.HighCutoff double
         opt.Save logical
+        opt.SaveName string
     end
 
     %% Parsing arguments
@@ -38,6 +39,7 @@ function [EEG] = SPMA_filter(EEG, opt)
     log = SPMA_loggerSetUp("preprocessing");
 
     %% Filter
+    log.info("Filtering")
     switch config.Type
         case "lowpass"
             locutoff = 0;
@@ -66,5 +68,10 @@ function [EEG] = SPMA_filter(EEG, opt)
     end
     
     EEG = pop_eegfiltnew(EEG, 'locutoff',locutoff,'hicutoff',hicutoff,'revfilt', revfilt);
+
+    %% Save
+    if config.Save
+        SPMA_saveData(EEG,config.saveName)
+    end
 end
 

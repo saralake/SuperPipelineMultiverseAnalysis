@@ -19,10 +19,11 @@
 % See also: EEGLAB, POP_RESAMPLE
 
 function [EEG] = SPMA_resample(EEG, opt)
-    arguments
+    arguments (Input)
         EEG struct
         opt.Frequency double
         opt.Save logical
+        opt.SaveName string
     end
     
     %% Parsing arguments
@@ -33,13 +34,18 @@ function [EEG] = SPMA_resample(EEG, opt)
     log = SPMA_loggerSetUp("preprocessing");
     
     %% Resampling
-    log.log("Resampling")
+    log.info("Resampling")
 
     fs_old = EEG.srate;
     log.info(sprintf("Old sampling rate: %.1f", fs_old))
 
     EEG = pop_resample( EEG, config.fs);
     log.info(sprintf("New sampling rate: %.1f", fs))
+
+    %% Save
+    if config.Save
+        SPMA_saveData(EEG,config.saveName)
+    end
 
 end
 

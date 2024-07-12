@@ -25,7 +25,62 @@ Moreover it is built over different open source packages:
 ## Code structure
 The code is structured in a modular way, where each function can be used as it is, or combined with other functions to build up a complete pipeline.
 
-The file `SuperPipeline.m` is just a template to build a pipeline.
+The file `SuperPipeline.m` is just a template to build a pipeline. (let's see...)
+
+The pipeline is defined with a json file. The structure of the file is the following:
+
+```json
+{
+	"step1": {
+		"name": "downsampling",
+        "function": "SPMA_resample",
+        "save": true,
+		"params": [
+			{
+				"Frequency": 500,
+			}
+		]
+	},
+	"step2": {
+		"function": "SPMA_filter",
+		"params": []
+	},
+	"step3": [
+		{
+            "function": "SPMA_ica",
+            "name": "ica1",
+			"params": [
+				{
+					"param_ica": 10
+				}
+			]
+		},
+		{
+            "function": "SPMA_ica",
+            "name": "ica2",
+			"params": [
+				{
+					"param_pca": 20
+				}
+			]
+		}
+	],
+    "step4": [
+        {
+            "function": "SPMA_source"
+            "name": "source1",
+        },
+        {
+            "function": "SPMA_source"
+            "name": "source2",
+        },
+        {
+            "function": "SPMA_source"
+            "name": "source3",
+        }
+    ]
+}
+```
 
 The `functions` directory stores one subdirectory for each of the included modules. Each of the module-subdirectory contains all the functions that implement the developed steps.
 

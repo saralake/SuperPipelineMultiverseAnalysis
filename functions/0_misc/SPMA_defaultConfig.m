@@ -54,18 +54,24 @@ preproc = struct();
 % All the configurations
 preproc.resample.Frequency = 250;     % [Hz] Sample frequency for resampling
 preproc.resample.Save = false;        % 
+preproc.resample.SaveName = "resample";        % 
+
 preproc.filter.Type = "bandpass";     % Type of the filter
 preproc.filter.LowCutoff = 0.5;       % [Hz] Low cutoff frequency for the filter
 preproc.filter.HighCutoff = 48;       % [Hz] High cutoff frequency for the filter
 preproc.filter.Save = false;
+preproc.filter.SaveName = "filter";
 
 preproc.ica.Save = true;
+preproc.ica.SaveName = "ica";
+
+preproc = addSaveFields(preproc);
 
 % Logging
 preproc.logging.Enabled = true;
 preproc.logging.Level = 2;
 preproc.logging.FileDir = getCodeFolder();
-preproc.logging.FileName = "SPMA_preprocessing.log";
+preproc.logging.FileName = "SPMA.log";
 
 % Add to the main config struct
 config.preprocessing = preproc;
