@@ -62,6 +62,14 @@ preproc.filter.HighCutoff = 48;       % [Hz] High cutoff frequency for the filte
 preproc.filter.Save = false;
 preproc.filter.SaveName = "filter";
 
+preproc.removeChannels.Channels = {};
+preproc.removeChannels.Save = false;
+preproc.removeChannels.SaveName = "removeChannels";
+
+preproc.selectChannels.Channels = {};
+preproc.selectChannels.Save = false;
+preproc.selectChannels.SaveName = "selectChannels";
+
 preproc.ica.Save = true;
 preproc.ica.SaveName = "ica";
 
