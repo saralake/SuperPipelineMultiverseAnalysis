@@ -70,6 +70,11 @@ preproc.selectChannels.Channels = {};
 preproc.selectChannels.Save = false;
 preproc.selectChannels.SaveName = "selectChannels";
 
+preproc.selectTime.AfterStart = 5;
+preproc.selectTime.BeforeEnd = 5;
+preproc.selectTime.Save = false;
+preproc.selectTime.SaveName = "selectTime";
+
 preproc.ica.Save = true;
 preproc.ica.SaveName = "ica";
 
