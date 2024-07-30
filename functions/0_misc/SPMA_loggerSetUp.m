@@ -30,14 +30,7 @@ function log = SPMA_loggerSetUp(module, opt)
     end
 
     %% Parsing arguments
-    config_all = SPMA_loadConfig();
-    switch module
-        case "headmodel"
-            module = headModel;
-        case {"source", "sourceestimation"}
-            module = sourceEstimation;
-    end
-    config = mergeStruct(config_all.(module).logging, opt);
+    config = SPMA_loadConfig(module, "logging", opt);
 
     loggerName = sprintf("SPMA_%s", module);
 
