@@ -27,8 +27,7 @@ function [EEG] = SPMA_selectChannels(EEG, opt)
     end
     
     %% Parsing arguments
-    config_all = SPMA_loadConfig();
-    config = mergeStruct(config_all.preprocessing.selectChannels, opt);
+    config = SPMA_loadConfig("preprocessing", "selectChannels", opt);
 
     %% Logger
     log = SPMA_loggerSetUp("preprocessing");

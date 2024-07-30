@@ -27,8 +27,7 @@ function [EEG] = SPMA_removeChannels(EEG, opt)
     end
     
     %% Parsing arguments
-    config_all = SPMA_loadConfig();
-    config = mergeStruct(config_all.preprocessing.removeChannels, opt);
+    config = SPMA_loadConfig("preprocessing", "removeChannels", opt);
 
     %% Logger
     log = SPMA_loggerSetUp("preprocessing");

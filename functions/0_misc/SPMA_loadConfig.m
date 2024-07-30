@@ -1,53 +1,43 @@
-% SPMA_LOADCONFIG - Load the configurations.
+% SPMA_LOADCONFIG - Load the configurations for a specific function. It
+% merges the default configurations with the custom. This function is
+% called at the beginning of every function of the toolbox.
 %
 % Usage:
-%     >> [config] = SPMA_loadConfig;
-%     >> [config] = SPMA_loadConfig(customConfig);
+%     >> [config] = SPMA_loadConfig(module, func);
+%     >> [config] = SPMA_loadConfig(module, func, customConfig);
 %
 % Inputs:
-%   customConfig = [struct] The custom configuration. Default is loaded
-%       from the file specified in default configuration.
+%   module = [struct] The module of the function you want to load
+%   func = [string] The function you want to load from the specific module.
+%           If the function is not present in the module it will load the whole
+%           module.
 %
 % Optional inputs
-%   Module  = [string] Load config of one specific module. Allowed modules
-%               are: 'all', 'general', 'preprocessing', 'headmodel', 'source',
-%               'connectivity', 'network'
+%   customConfig  = [struct] The custom configuration for the specified
+%                    function. These configuration will be merged with the
+%                    default configuration values for that function.
 %
 % Outputs:
-%    config = [struct] Nested structure with the default configurations
+%    config = [struct] Structure with the configuration of the requested
+%               function
 %
 % Authors: Alessandro Tonin, IRCCS San Camillo Hospital, 2024
 % 
-% See also: SPMA_DEFAULTCONFIG
+% See also: SPMA_DEFAULTCONFIG, MERGESTRUCT
 
 
-function config = SPMA_loadConfig(customConfig, opt)
+function config = SPMA_loadConfig(module, func, customConfig)
     arguments
+        module (1,1) string {mustBeMember(module, ["general", "preprocessing", "headmodel", "source", "sourceestimation", "connectivity", "network"])}
+        func (1,1) string
         customConfig (1,1) struct = struct()
-        opt.Module (1,1) string {mustBeMember(opt.Module, ["all", "general", "preprocessing", "headmodel", "source", "sourceestimation", "connectivity", "network"])} = "all"
     end
 
-    %Load default config
+    % Load all default config
     config = SPMA_defaultConfig;
 
-    % If no custom configuration, use the file defined in default config
-    if isempty(fieldnames(customConfig))
-        % If the file does not exist create a new one with default values
-        customConfigPath = fullfile(config.general.customConfig.FileDir,config.general.customConfig.FileName);
-        if ~exist(customConfigPath, "file")
-            saveConfig(config, customConfigPath)
-        end
-
-        % Load the file
-        customConfig = readConfig(customConfigPath);
-
-    end
-
-    % Merge default config with custom config
-    config = mergeStruct(config, customConfig);
-
     % Extract only the desired module
-    switch opt.Module
+    switch module
         case "general"
             config = config.general;
         case "preprocessing"
@@ -62,23 +52,12 @@ function config = SPMA_loadConfig(customConfig, opt)
             config = config.network;
     end
 
+    if isfield(config, func)
+        config = config.(func);
+        % else ignore
+    end
+
+    config = mergeStruct(config, customConfig);
+
 end
 
-function saveConfig(c, pth)
-    arguments
-        c struct
-        pth string
-    end
-    c_json = jsonencode(c, "PrettyPrint",true);
-    fid = fopen(pth, "w");
-    fwrite(fid, c_json);
-    fclose(fid);
-end
-
-function c = readConfig(pth)
-    arguments
-        pth string
-    end
-    c_str = fileread(pth);
-    c = jsondecode(c_str);
-end

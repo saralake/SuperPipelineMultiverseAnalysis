@@ -27,8 +27,7 @@ function [EEG] = SPMA_resample(EEG, opt)
     end
     
     %% Parsing arguments
-    config_all = SPMA_loadConfig();
-    config = mergeStruct(config_all.preprocessing.resample, opt);
+    config = SPMA_loadConfig("preprocessing", "resample", opt);
 
     %% Logger
     log = SPMA_loggerSetUp("preprocessing");

@@ -73,7 +73,6 @@ preproc.selectChannels.SaveName = "selectChannels";
 preproc.ica.Save = true;
 preproc.ica.SaveName = "ica";
 
-preproc = addSaveFields(preproc);
 
 % Logging
 preproc.logging.Enabled = true;

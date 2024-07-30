@@ -32,8 +32,7 @@ function [EEG] = SPMA_filter(EEG, opt)
     end
 
     %% Parsing arguments
-    config_all = SPMA_loadConfig();
-    config = mergeStruct(config_all.preprocessing.filter, opt);
+    config = SPMA_loadConfig("preprocessing", "filter", opt);
 
     %% Logger
     log = SPMA_loggerSetUp("preprocessing");
