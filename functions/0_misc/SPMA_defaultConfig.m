@@ -75,6 +75,10 @@ preproc.selectTime.BeforeEnd = 5;
 preproc.selectTime.Save = false;
 preproc.selectTime.SaveName = "selectTime";
 
+preproc.cleanData.Severity = "loose";
+preproc.cleanData.Save = false;
+preproc.cleanData.SaveName = "cleanData";
+
 preproc.ica.Save = true;
 preproc.ica.SaveName = "ica";
 
