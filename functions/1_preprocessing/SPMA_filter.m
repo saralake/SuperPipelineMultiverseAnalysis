@@ -25,8 +25,9 @@ function [EEG] = SPMA_filter(EEG, opt)
     arguments (Input)
         EEG struct
         opt.Type string {mustBeMember(opt.Type, ["lowpass", "highpass", "bandpass", "bandstop"])}
-        opt.LowCutoff double
+        opt.LowCutoff double 
         opt.HighCutoff double
+        opt.EEGLAB (1,:) cell
         opt.Save logical
         opt.SaveName string
     end
@@ -66,7 +67,7 @@ function [EEG] = SPMA_filter(EEG, opt)
             error("ERROR: Type %s not allowed. Only allowed filters are: 'lowpass', 'highpass', 'bandpass', bandstop'", config.Type)
     end
     
-    EEG = pop_eegfiltnew(EEG, 'locutoff',locutoff,'hicutoff',hicutoff,'revfilt', revfilt);
+    EEG = pop_eegfiltnew(EEG,'locutoff',locutoff,'hicutoff',hicutoff,'revfilt',revfilt, config.EEGLAB{:});
 
     %% Save
     if config.Save

@@ -22,6 +22,7 @@ function [EEG] = SPMA_selectChannels(EEG, opt)
     arguments (Input)
         EEG struct
         opt.Channels (1,:) string
+        opt.EEGLAB (1,:) cell
         opt.Save logical
         opt.SaveName string
     end
@@ -37,7 +38,7 @@ function [EEG] = SPMA_selectChannels(EEG, opt)
 
     log.info(sprintf("Selected channels %s", config.Channels))
 
-    EEG = pop_select(EEG, 'channel', cellstr(config.Channels));
+    EEG = pop_select(EEG, 'channel', cellstr(config.Channels), config.EEGLAB{:});
 
     %% Save
     if config.Save

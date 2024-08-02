@@ -26,6 +26,7 @@ function [EEG] = SPMA_selectTime(EEG, opt)
         EEG struct
         opt.AfterStart (1,1) double
         opt.BeforeEnd (1,1) double
+        opt.EEGLAB (1,:) cell
         opt.Save logical
         opt.SaveName string
     end
@@ -53,7 +54,7 @@ function [EEG] = SPMA_selectTime(EEG, opt)
 
     log.info(sprintf("Selected time [%.3f, %.3f] (%.3f after start, %.3f before end)", time_from, time_to, config.AfterStart, config.BeforeEnd))
 
-    EEG = pop_select(EEG, 'time', [time_from, time_to]);
+    EEG = pop_select(EEG, 'time', [time_from, time_to], config.EEGLAB{:});
 
     %% Save
     if config.Save

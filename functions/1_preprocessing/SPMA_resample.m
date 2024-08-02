@@ -22,6 +22,7 @@ function [EEG] = SPMA_resample(EEG, opt)
     arguments (Input)
         EEG struct
         opt.Frequency double
+        opt.EEGLAB (1,:) cell
         opt.Save logical
         opt.SaveName string
     end
@@ -38,7 +39,7 @@ function [EEG] = SPMA_resample(EEG, opt)
     fs_old = EEG.srate;
     log.info(sprintf("Old sampling rate: %.1f", fs_old))
 
-    EEG = pop_resample( EEG, config.fs);
+    EEG = pop_resample( EEG, config.fs, config.EEGLAB{:});
     log.info(sprintf("New sampling rate: %.1f", fs))
 
     %% Save
