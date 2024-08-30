@@ -1,6 +1,20 @@
 # SuperPipelineMultiverseAnalysis
 A modular pipeline for connectivity and network analysis of resting state EEG data
 
+## Install
+
+To install the software you need to use git (in the future there will be downloadable released versions).
+
+If you don't have git on your computer, you can follow for example [this tutorial](https://github.com/git-guides/install-git).
+
+Once you have git installed go in the folder where you want to install the toolbox and from the terminal run:
+
+```bash
+git clone --recurse-submodules https://github.com/SanCamillo-NeurophysiologyLab/SuperPipelineMultiverseAnalysis.git
+```
+
+It is very important to add `--recurse-submodules` to the command, since all the external dependencies are included as submodules!
+
 ## Pipeline structure
 The pipeline is structured in 5 main modules:
 
@@ -18,9 +32,11 @@ The pipeline is developed with `Matlab 2022b`.
 
 Moreover it is built over different open source packages:
 
-| Package   | Version   | Use |
-| ---       | ---       | --- |
-| [EEGLAB](https://github.com/sccn/eeglab) | 2024.0 | Import data, Preprocessing |
+| Package   | Version  |
+| ---       | ---      |
+| [EEGLAB](https://github.com/sccn/eeglab) | 2024.1 |
+
+The external dependencies are included as submodules in the folder `external`
 
 ## Code structure
 The code is structured in a modular way, where each function can be used as it is, or combined with other functions to build up a complete pipeline.
