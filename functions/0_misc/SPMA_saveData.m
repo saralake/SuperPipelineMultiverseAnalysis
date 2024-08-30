@@ -3,43 +3,55 @@
 %
 % Usage:
 %     >> SPMA_saveData(data)
-%     >> SPMA_saveData(data, saveName)
-%     >> SPMA_saveData(data, saveName, saveFolder)
+%     >> SPMA_saveData(data, opt.Name)
+%     >> SPMA_saveData(data, opt.Name, opt.Folder)
 %
 % Inputs:
 %    data        = [any] A set of data
-%    saveName    = [string] The name of the saved file (default: the name
+%
+% Optional inputs:
+%    Name    = [string] The name of the saved file (default: the name
 %           of the calling function)
-%    saveFolder  = [string] The folder where to save the file (default: the
+%    Folder  = [string] The folder where to save the file (default: the
 %           name of the module of the calling function)
+%    OutputFolder = [string] The main folder for all output files. (default: 'output/date')
 %
 %
 % Authors: Alessandro Tonin, IRCCS San Camillo Hospital, 2024
 % 
 % See also: SAVE, POP_SAVESET
 
-function SPMA_saveData(data, saveName, saveFolder)
+function SPMA_saveData(data, opt)
     arguments (Input)
         data
-        saveName string = ""
-        saveFolder string = ""
+        opt.Name string = ""
+        opt.Folder string = ""
+        opt.OutputFolder string = ""
     end
 
     %% Logger
     log = SPMA_loggerSetUp("general");
 
     %% Get folder and name automatically from the calling function
-    if saveFolder == "" || saveName == ""
+    if opt.Folder == "" || opt.Name == ""
         [module, functionName] = SPMA_getModuleAndName(2);
-        if saveFolder == ""
-            saveFolder = module;
+        if opt.Folder == ""
+            opt.Folder = module;
         end
-        if saveName == ""
-            saveName = functionName;
+        if opt.Name == ""
+            opt.Name = functionName;
         end
     end
 
+    %% Get the main output folder
+    if opt.OutputFolder == ""
+        nowstr = string(datetime("now", "Format", "yyyyMMdd_HHmmss"));
+        opt.OutputFolder = fullfile("output", nowstr);
+    end
+
     %% Save
+
+    saveFolder = fullfile(opt.OutputFolder, opt.Folder);
     
     % Check folder and create it if does not exist
     if ~exist(saveFolder, "dir")
@@ -50,7 +62,7 @@ function SPMA_saveData(data, saveName, saveFolder)
     end
 
     % clean save name removing extensions
-    [~, saveName, ~] = fileparts(saveName);
+    [~, opt.Name, ~] = fileparts(opt.Name);
 
     % Check data type
     dataType = SPMA_checkDataType(data);
@@ -58,11 +70,11 @@ function SPMA_saveData(data, saveName, saveFolder)
     switch dataType
         case "EEGLAB"
             saveExt = 'set';
-            saveName = sprintf("%s.%s", saveName, saveExt);
+            opt.Name = sprintf("%s.%s", opt.Name, saveExt);
             % Save with EEGLAB function
-            log.info(sprintf("Save EEGLAB dataset: %s", fullfile(saveFolder,saveName)))
+            log.info(sprintf("Save EEGLAB dataset: %s", fullfile(saveFolder,opt.Name)))
             pop_saveset(data,...
-                'filename', saveName,...
+                'filename', opt.Name,...
                 'filepath', saveFolder,...
                 'savemode', 'onefile', ...
                 'version', '7.3')
@@ -70,10 +82,10 @@ function SPMA_saveData(data, saveName, saveFolder)
             % Unknown type. Save a mat file
             log.warning("Unknown type")
             saveExt = 'mat';
-            saveName = sprintf("%s.%s", saveName, saveExt);
+            opt.Name = sprintf("%s.%s", opt.Name, saveExt);
             
-            saveFullPath = fullfile(saveFolder, saveName);
-            log.info(sprintf("Save matlab dataset: %s", fsaveFullPath))
+            saveFullPath = fullfile(saveFolder, opt.Name);
+            log.info(sprintf("Save matlab dataset: %s", saveFullPath))
             
             save(saveFullPath, "data", "-v7.3")
     end

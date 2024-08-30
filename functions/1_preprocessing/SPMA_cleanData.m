@@ -22,17 +22,23 @@
 function [EEG] = SPMA_cleanData(EEG, opt)
     arguments (Input)
         EEG struct
+        % Optional
         opt.Severity string {mustBeMember(opt.Severity, ["loose", "strict"])}
         opt.EEGLAB (1,:) cell
+        % Save options
         opt.Save logical
         opt.SaveName string
+        opt.OutputFolder string
     end
+
+    %% Constants
+    module = "preprocessing";
     
     %% Parsing arguments
-    config = SPMA_loadConfig("preprocessing", "cleanData", opt);
+    config = SPMA_loadConfig(module, "cleanData", opt);
 
     %% Logger
-    log = SPMA_loggerSetUp("preprocessing");
+    log = SPMA_loggerSetUp(module);
     
     %% Cleaning data
     log.info(sprintf("Cleaning data with %s parameters", config.Type))
@@ -78,7 +84,7 @@ function [EEG] = SPMA_cleanData(EEG, opt)
 
     %% Save
     if config.Save
-        SPMA_saveData(EEG,config.saveName)
+        SPMA_saveData(EEG, "Name", config.saveName, "Folder", module, "OutputFolder", config.OutputFolder);
     end
 
 end

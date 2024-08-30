@@ -29,7 +29,7 @@
 function config = SPMA_loadConfig(module, func, customConfig)
     arguments
         module (1,1) string {mustBeMember(module, ["general", "preprocessing", "headmodel", "source", "sourceestimation", "connectivity", "network"])}
-        func (1,1) string
+        func (1,1) string = ""
         customConfig (1,1) struct = struct()
     end
 

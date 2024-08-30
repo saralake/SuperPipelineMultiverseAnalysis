@@ -38,6 +38,10 @@ general = struct();
 general.customConfig.FileDir = getCodeFolder();
 general.customConfig.FileName = "SPMA_config.json"; % Name of the custom configuration file to overwrite the values in this file
 
+% Saving
+nowstr = string(datetime("now", "Format", "yyyyMMdd_HHmmss"));
+general.save.OutputFolder = fullfile("output", nowstr);
+
 % Logging
 general.logging.Enabled = true;
 general.logging.Level = 2;
@@ -56,6 +60,7 @@ preproc.resample.Frequency = 250;     % [Hz] Sample frequency for resampling
 preproc.resample.EEGLAB = {};
 preproc.resample.Save = false;        % 
 preproc.resample.SaveName = "resample";        % 
+preproc.resample.OutputFolder = "";
 
 preproc.filter.Type = "bandpass";     % Type of the filter
 preproc.filter.LowCutoff = 0.5;       % [Hz] Low cutoff frequency for the filter
@@ -63,27 +68,32 @@ preproc.filter.HighCutoff = 48;       % [Hz] High cutoff frequency for the filte
 preproc.filter.EEGLAB = {};
 preproc.filter.Save = false;
 preproc.filter.SaveName = "filter";
+preproc.filter.OutputFolder = "";
 
 preproc.removeChannels.Channels = {};
 preproc.removeChannels.EEGLAB = {};
 preproc.removeChannels.Save = false;
 preproc.removeChannels.SaveName = "removeChannels";
+preproc.removeChannels.OutputFolder = "";
 
 preproc.selectChannels.Channels = {};
 preproc.selectChannels.EEGLAB = {};
 preproc.selectChannels.Save = false;
 preproc.selectChannels.SaveName = "selectChannels";
+preproc.selectChannels.OutputFolder = "";
 
 preproc.selectTime.AfterStart = 5;
 preproc.selectTime.BeforeEnd = 5;
 preproc.selectTime.EEGLAB = {};
 preproc.selectTime.Save = false;
 preproc.selectTime.SaveName = "selectTime";
+preproc.selectTime.OutputFolder = "";
 
 preproc.cleanData.Severity = "loose";
 preproc.cleanData.EEGLAB = {};
 preproc.cleanData.Save = false;
 preproc.cleanData.SaveName = "cleanData";
+preproc.cleanData.OutputFolder = "";
 
 preproc.runica.Extended = 1;
 preproc.runica.Interrupt = true;
@@ -92,6 +102,7 @@ preproc.runica.SaveBefore = true;
 preproc.runica.SaveNameBefore = "before_runica";
 preproc.runica.Save = true;
 preproc.runica.SaveName = "runica";
+preproc.runica.OutputFolder = "";
 
 
 % Logging

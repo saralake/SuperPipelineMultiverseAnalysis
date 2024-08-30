@@ -21,17 +21,23 @@
 function [EEG] = SPMA_resample(EEG, opt)
     arguments (Input)
         EEG struct
+        % Optional
         opt.Frequency double
         opt.EEGLAB (1,:) cell
+        % Save options
         opt.Save logical
         opt.SaveName string
+        opt.OutputFolder string
     end
+
+    %% Constants
+    module = "preprocessing";
     
     %% Parsing arguments
-    config = SPMA_loadConfig("preprocessing", "resample", opt);
+    config = SPMA_loadConfig(module, "resample", opt);
 
     %% Logger
-    log = SPMA_loggerSetUp("preprocessing");
+    log = SPMA_loggerSetUp(module);
     
     %% Resampling
     log.info("Resampling")
@@ -44,7 +50,7 @@ function [EEG] = SPMA_resample(EEG, opt)
 
     %% Save
     if config.Save
-        SPMA_saveData(EEG,config.saveName)
+        SPMA_saveData(EEG, "Name", config.saveName, "Folder", module, "OutputFolder", config.OutputFolder);
     end
 
 end

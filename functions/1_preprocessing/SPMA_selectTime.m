@@ -24,18 +24,24 @@
 function [EEG] = SPMA_selectTime(EEG, opt)
     arguments (Input)
         EEG struct
+        % Optional
         opt.AfterStart (1,1) double
         opt.BeforeEnd (1,1) double
         opt.EEGLAB (1,:) cell
+        % Save options
         opt.Save logical
         opt.SaveName string
+        opt.OutputFolder string
     end
+
+    %% Constants
+    module = "preprocessing";
     
     %% Parsing arguments
-    config = SPMA_loadConfig("preprocessing", "selectTime", opt);
+    config = SPMA_loadConfig(module, "selectTime", opt);
 
     %% Logger
-    log = SPMA_loggerSetUp("preprocessing");
+    log = SPMA_loggerSetUp(module);
     
     %% Removing channels
     log.info("Select time")
@@ -58,7 +64,7 @@ function [EEG] = SPMA_selectTime(EEG, opt)
 
     %% Save
     if config.Save
-        SPMA_saveData(EEG,config.saveName)
+        SPMA_saveData(EEG, "Name", config.saveName, "Folder", module, "OutputFolder", config.OutputFolder);
     end
 
 end

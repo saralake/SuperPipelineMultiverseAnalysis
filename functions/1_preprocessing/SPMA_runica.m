@@ -25,20 +25,26 @@
 function [EEG] = SPMA_runica(EEG, opt)
     arguments (Input)
         EEG struct
+        % Optional
         opt.Extended double {mustBeInteger}
         opt.Interrupt logical
         opt.EEGLAB (1,:) cell
         opt.SaveBefore logical
         opt.SaveNameBefore string
+        % Save options
         opt.Save logical
         opt.SaveName string
+        opt.OutputFolder string
     end
+
+    %% Constants
+    module = "preprocessing";
     
     %% Parsing arguments
-    config = SPMA_loadConfig("preprocessing", "runica", opt);
+    config = SPMA_loadConfig(module, "runica", opt);
 
     %% Logger
-    log = SPMA_loggerSetUp("preprocessing");
+    log = SPMA_loggerSetUp(module);
     
     %% Save ICA
     if config.SaveBefore
@@ -53,7 +59,7 @@ function [EEG] = SPMA_runica(EEG, opt)
 
     %% Save
     if config.Save
-        SPMA_saveData(EEG,config.saveName)
+        SPMA_saveData(EEG, "Name", config.saveName, "Folder", module, "OutputFolder", config.OutputFolder);
     end
 
 end
