@@ -750,6 +750,12 @@ classdef (ConstructOnLoad = false) logger < handle
         
         function create_log_file(obj)
             % Create the log file
+            if ~exist(obj.log_directory,"dir")
+                [success, message, ~] = mkdir(obj.log_directory);
+                if ~success
+                    error(message)
+                end
+            end
             f = fopen(fullfile(obj.log_directory, obj.log_filename), 'w');
             fclose(f); 
         end
