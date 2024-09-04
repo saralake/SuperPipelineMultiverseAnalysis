@@ -17,7 +17,7 @@
 % 
 % See also: SAVE, POP_SAVESET
 
-function SPMA_runPipeline(pipelineJSON, data, opt)
+function data = SPMA_runPipeline(pipelineJSON, data, opt)
     arguments (Input)
         pipelineJSON string {mustBeFile}
         data
@@ -39,7 +39,7 @@ function SPMA_runPipeline(pipelineJSON, data, opt)
     % TODO: Check pipeline
 
     log.info(sprintf("Pipeline file: %s", pipelineJSON));
-    log.info(pipeline_str);
+    log.info("\n"+jsonencode(pipeline, "PrettyPrint", true));
 
     %% Starts the loop
     steps = fieldnames(pipeline);
@@ -56,13 +56,13 @@ function SPMA_runPipeline(pipelineJSON, data, opt)
 
         l_data = length(data);
         for n_data = 1:l_data
-            old_data = data{n_data};
+            current_data = data{n_data};
             for variation = 1:n_multiverse
                 step_variation = step(variation);
                 log.info(sprintf(">> Variation: %d", variation))
                 
                 % Run the step
-                out = run_step(old_data, step_variation, config.OutputFolder);
+                out = run_step(current_data, step_variation, config.OutputFolder);
 
                 % Save the output in our data array
                 idx = n_data + (variation-1)*l_data;
@@ -79,34 +79,37 @@ end
 
 function dataOut = run_step(dataIn, step, output)
 
-% Check if there are custom params
-if isfield(step, "params")
-    params = step.params;
-else
-    params = struct();
-end
-
-% Check if there is a custom name
-if isfield(step, "name")
-    name = step.name;
+    % Check if there are custom params
+    if isfield(step, "params")
+        params = step.params;
+    else
+        params = struct();
+    end
+    
+    % Check if there is a custom name
+    if isfield(step, "name")
+        name = step.name;
+    else
+        name = step.function;
+    end
     params.SaveName = name;
-else
-    name = step.function;
-end
-
-% Check if must be saved
-if isfield(step, "save")
-    params.Save = step.save;
-end
-
-% Update output folder
-params.OutputFolder = output;
-
-% Create function handle
-fun = str2func(step.function);
-
-% Execute the step
-dataOut = fun(dataIn, params);
+    
+    % Check if must be saved
+    if isfield(step, "save")
+        params.Save = step.save;
+    end
+    
+    % Update output folder
+    params.OutputFolder = output;
+    
+    % Create function handle
+    fun = str2func(step.function);
+    
+    % Convert params to a cell array
+    cellParams = unpackStruct(params);
+    
+    % Execute the step
+    dataOut = fun(dataIn, cellParams{:});
 
 end
 
