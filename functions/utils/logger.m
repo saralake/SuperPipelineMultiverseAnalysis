@@ -202,6 +202,7 @@ classdef (ConstructOnLoad = false) logger < handle
         object_creation_function = []  % TODO:  Also check function in log manager
         
         log_level_labels  = ["DEBUG"; "INFO"; "WARNING"; "ERROR"; "CRITICAL"; "FATAL"]
+        color_level       = ["#a6a6a6";"#000000";"#ff7f00";"#ff0000";"#b00000";"#b00000"];
         bold_font_level   = 6;
 
         caller_filename   = "";
@@ -461,12 +462,12 @@ classdef (ConstructOnLoad = false) logger < handle
             fprintf("  Level  |  Label\n")
             fprintf("------------------------\n")
             for i = 1 : length(obj.log_level_labels)
-                if i < 3
-                   color_index = 1;
-                else
-                   color_index = 2;
-                end       
-                
+%                 if i < 3
+%                    color_index = 1;
+%                 else
+%                    color_index = 2;
+%                 end       
+                color_index = obj.color_level(i);
                 if i == obj.bold_font_level
                    log_level_label = obj.bold_font(obj.create_level_label(i));
                 else
@@ -476,7 +477,8 @@ classdef (ConstructOnLoad = false) logger < handle
                 if i == obj.default_level
                    default_level_mark = "<-- default_level";
                 end
-                fprintf(color_index, '  %i      |  %s  %s\n', i, log_level_label, default_level_mark);
+%                 fprintf(color_index, '  %i      |  %s  %s\n', i, log_level_label, default_level_mark);
+                cprintf(color_index, '  %i      |  %s  %s\n', i, log_level_label, default_level_mark);
             end
             fprintf('\n')
         end
@@ -530,7 +532,9 @@ classdef (ConstructOnLoad = false) logger < handle
             if obj.default_level <= level_index && obj.enabled
                 if (level_index > length(obj.log_level_labels) || level_index < 1)
                    fprintf('[LOGGER] : %s\n', message_text)
-                   fprintf(2, '[LOGGER] : Level number (%i) is not within vaild range (Range: 1-%i)\n', ...
+%                    fprintf(2, '[LOGGER] : Level number (%i) is not within vaild range (Range: 1-%i)\n', ...
+%                        length(level_index_obj.log_level_labels))
+                   cprintf('error', '[LOGGER] : Level number (%i) is not within vaild range (Range: 1-%i)\n', ...
                        length(level_index_obj.log_level_labels))
                    return 
                 end
@@ -715,14 +719,15 @@ classdef (ConstructOnLoad = false) logger < handle
             % Compiling the log message
             [log_message] = obj.construct_log_message(level_index, message_text);
             
-            % Determine if message color
-            if level_index < 3
-                % Default font color
-               color_index = 1;
-            else
-               % Red font color
-               color_index = 2;  
-            end
+%             % Determine if message color
+%             if level_index < 3
+%                 % Default font color
+%                color_index = 1;
+%             else
+%                % Red font color
+%                color_index = 2;  
+%             end
+            color_index = obj.color_level(level_index);
             
             % Write message to log file
             if obj.log_to_file
@@ -736,7 +741,8 @@ classdef (ConstructOnLoad = false) logger < handle
             
             % Output to command window
             if obj.log_to_command_window
-               fprintf(color_index, log_message);
+%                fprintf(color_index, log_message);
+               cprintf(color_index, log_message);
             end
         end
         
@@ -915,7 +921,8 @@ classdef (ConstructOnLoad = false) logger < handle
                 fprintf(logger_message)
             elseif nargin == 2
                 % Display in red colored font
-                fprintf(color_index, logger_message);
+%                 fprintf(color_index, logger_message);
+                cprintf(color_index, logger_message);
             elseif nargin == 3
                 if error_message
                     % Display error message
@@ -923,7 +930,8 @@ classdef (ConstructOnLoad = false) logger < handle
                     error(logger_message);
                 else
                     % Display in red colored font
-                    fprintf(color_index, logger_message);
+%                     fprintf(color_index, logger_message);
+                    cprintf(color_index, logger_message);
                 end
             else
                 error("Too many arguments passed");
