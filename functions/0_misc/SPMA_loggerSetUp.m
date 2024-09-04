@@ -18,33 +18,35 @@
 % 
 % See also: LOGGER
 
-function log = SPMA_loggerSetUp(module, opt)
+function log = SPMA_loggerSetUp(module, logOptions)
     arguments (Input)
         module (1,1) string {mustBeMember(module, ["general", "preprocessing", "headmodel", "source", "sourceestimation", "connectivity", "network"])}
-        opt.Level double
-        opt.FileDir string
-        opt.FileName string
+        logOptions struct = struct()
     end
     arguments (Output)
         log logger
     end
 
     %% Parsing arguments
-    config = SPMA_loadConfig(module, "logging", opt);
-
+    config = SPMA_loadConfig(module, "logging", logOptions);
+    
     loggerName = sprintf("SPMA_%s", module);
 
     log = logger(loggerName);
-    log.enabled = config.Enabled;
-    log.default_level = config.Level;
+    log.enabled = config.LogEnabled;
+    log.default_level = config.LogLevel;
     log.show_date = true;
     log.show_time = true;
     log.show_ms = true;
     log.show_logging_filename = true;
     log.log_to_command_window = true;
     log.log_to_file = true;
-    log.log_directory = config.FileDir;
-    log.log_filename = config.FileName;
+    if module == "general"
+        log.log_directory = config.LogFileDir;
+    else
+        log.log_directory = fullfile(config.LogFileDir, module);
+    end
+    log.log_filename = config.LogFileName;
 
 end
 

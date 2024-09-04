@@ -24,17 +24,26 @@
 function SPMA_saveData(data, opt)
     arguments (Input)
         data
+        % Optional
         opt.Name string = ""
         opt.Folder string = ""
         opt.OutputFolder string = ""
+        % Log options
+        opt.LogEnabled logical
+        opt.LogLevel double {mustBeInteger,mustBeInRange(opt.LogLevel,0,6)}
+        opt.LogFileDir string
+        opt.LogFileName string
     end
 
+    %% Get module and callingFunction
+    [module, functionName] = SPMA_getModuleAndName(2);
+
     %% Logger
-    log = SPMA_loggerSetUp("general");
+    logConfig = SPMA_loadConfig(module, "logging", opt);
+    log = SPMA_loggerSetUp(module,logConfig);
 
     %% Get folder and name automatically from the calling function
     if opt.Folder == "" || opt.Name == ""
-        [module, functionName] = SPMA_getModuleAndName(2);
         if opt.Folder == ""
             opt.Folder = module;
         end
@@ -67,27 +76,37 @@ function SPMA_saveData(data, opt)
     % Check data type
     dataType = SPMA_checkDataType(data);
 
+    unknownType = false;
+
     switch dataType
         case "EEGLAB"
             saveExt = 'set';
             opt.Name = sprintf("%s.%s", opt.Name, saveExt);
             % Save with EEGLAB function
             log.info(sprintf("Save EEGLAB dataset: %s", fullfile(saveFolder,opt.Name)))
-            pop_saveset(data,...
-                'filename', opt.Name,...
-                'filepath', saveFolder,...
-                'savemode', 'onefile', ...
-                'version', '7.3')
+            try
+                pop_saveset(data,...
+                    'filename', opt.Name,...
+                    'filepath', saveFolder,...
+                    'savemode', 'onefile', ...
+                    'version', '7.3')
+            catch ME
+                log.error("EEGLAB saveset not working.")
+                unknownType = true;
+            end
         otherwise
-            % Unknown type. Save a mat file
-            log.warning("Unknown type")
-            saveExt = 'mat';
-            opt.Name = sprintf("%s.%s", opt.Name, saveExt);
-            
-            saveFullPath = fullfile(saveFolder, opt.Name);
-            log.info(sprintf("Save matlab dataset: %s", saveFullPath))
-            
-            save(saveFullPath, "data", "-v7.3")
+            unknownType = true;
+    end
+    if unknownType
+        % Unknown type. Save a mat file
+        log.warning("Unknown type of data. Saving as Matlab variable.")
+        saveExt = 'mat';
+        opt.Name = sprintf("%s.%s", opt.Name, saveExt);
+        
+        saveFullPath = fullfile(saveFolder, opt.Name);
+        log.info(sprintf("Save matlab dataset: %s", saveFullPath))
+        
+        save(saveFullPath, "data", "-v7.3")
     end
 end
 

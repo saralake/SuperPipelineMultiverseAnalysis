@@ -40,15 +40,13 @@ general.customConfig.FileName = "SPMA_config.json"; % Name of the custom configu
 
 % Saving
 nowstr = string(datetime("now", "Format", "yyyyMMdd_HHmmss"));
-general.save.OutputFolder = fullfile("output", nowstr);
+general.save.OutputFolder = fullfile(getCodeFolder(), "output", nowstr);
 
 % Logging
-general.logging.Enabled = true;
-general.logging.Level = 2;
-general.logging.FileDir = getCodeFolder();
-general.logging.FileName = "SPMA.log";
-
-general.verbosity = 1; % 0: no verbose, 1: 
+general.logging.LogEnabled = true;
+general.logging.LogLevel = 2;
+general.logging.LogFileDir = getCodeFolder();
+general.logging.LogFileName = "SPMA.log";
 
 % Add to the main config struct
 config.general = general;
@@ -106,10 +104,10 @@ preproc.runica.OutputFolder = "";
 
 
 % Logging
-preproc.logging.Enabled = true;
-preproc.logging.Level = 2;
-preproc.logging.FileDir = getCodeFolder();
-preproc.logging.FileName = "SPMA.log";
+preproc.logging.LogEnabled = true;
+preproc.logging.LogLevel = 2;
+preproc.logging.LogFileDir = getCodeFolder();
+preproc.logging.LogFileName = "SPMA_preprocessing.log";
 
 % Add to the main config struct
 config.preprocessing = preproc;
@@ -119,10 +117,10 @@ headModel = struct();
 % All the configurations
 
 % Logging
-headModel.logging.Enabled = true;
-headModel.logging.Level = 2;
-headModel.logging.FileDir = getCodeFolder();
-headModel.logging.FileName = "SPMA.log";
+headModel.logging.LogEnabled = true;
+headModel.logging.LogLevel = 2;
+headModel.logging.LogFileDir = getCodeFolder();
+headModel.logging.LogFileName = "SPMA_headModel.log";
 
 % Add to the main config struct
 config.headModel = headModel;
@@ -132,10 +130,10 @@ source = struct();
 % All the configurations
 
 % Logging
-source.logging.Enabled = true;
-source.logging.Level = 2;
-source.logging.FileDir = getCodeFolder();
-source.logging.FileName = "SPMA.log";
+source.logging.LogEnabled = true;
+source.logging.LogLevel = 2;
+source.logging.LogFileDir = getCodeFolder();
+source.logging.LogFileName = "SPMA_sourceEstimation.log";
 
 % Add to the main config struct
 config.sourceEstimation = source;
@@ -145,10 +143,10 @@ connectivity = struct();
 % All the configurations
 
 % Logging
-connectivity.logging.Enabled = true;
-connectivity.logging.Level = 2;
-connectivity.logging.FileDir = getCodeFolder();
-connectivity.logging.FileName = "SPMA.log";
+connectivity.logging.LogEnabled = true;
+connectivity.logging.LogLevel = 2;
+connectivity.logging.LogFileDir = getCodeFolder();
+connectivity.logging.LogFileName = "SPMA_connectivity.log";
 
 % Add to the main config struct
 config.connectivity = connectivity;
@@ -159,10 +157,10 @@ network = struct();
 % All the configurations
 
 % Logging
-network.logging.Enabled = true;
-network.logging.Level = 2;
-network.logging.FileDir = getCodeFolder();
-network.logging.FileName = "SPMA.log";
+network.logging.LogEnabled = true;
+network.logging.LogLevel = 2;
+network.logging.LogFileDir = getCodeFolder();
+network.logging.LogFileName = "SPMA_network.log";
 
 % Add to the main config struct
 config.network = network;

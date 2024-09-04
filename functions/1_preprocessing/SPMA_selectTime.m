@@ -32,6 +32,11 @@ function [EEG] = SPMA_selectTime(EEG, opt)
         opt.Save logical
         opt.SaveName string
         opt.OutputFolder string
+        % Log options
+        opt.LogEnabled logical
+        opt.LogLevel double {mustBeInteger,mustBeInRange(opt.LogLevel,0,6)}
+        opt.LogFileDir string
+        opt.LogFileName string
     end
 
     %% Constants
@@ -41,7 +46,8 @@ function [EEG] = SPMA_selectTime(EEG, opt)
     config = SPMA_loadConfig(module, "selectTime", opt);
 
     %% Logger
-    log = SPMA_loggerSetUp(module);
+    logConfig = SPMA_loadConfig(module, "logging", opt);
+    log = SPMA_loggerSetUp(module, logConfig);
     
     %% Removing channels
     log.info("Select time")
@@ -64,7 +70,8 @@ function [EEG] = SPMA_selectTime(EEG, opt)
 
     %% Save
     if config.Save
-        SPMA_saveData(EEG, "Name", config.saveName, "Folder", module, "OutputFolder", config.OutputFolder);
+        logParams = unpackStruct(logConfig);
+        SPMA_saveData(EEG, "Name", config.saveName, "Folder", module, "OutputFolder", config.OutputFolder, logParams{:});
     end
 
 end

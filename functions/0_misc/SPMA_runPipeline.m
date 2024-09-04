@@ -21,14 +21,15 @@ function data = SPMA_runPipeline(pipelineJSON, data, opt)
     arguments (Input)
         pipelineJSON string {mustBeFile}
         data
-        opt.OutputFolder string = ""
+        opt.OutputFolder string
     end
 
     %% Parsing arguments
     config = SPMA_loadConfig("general", "save", opt);
 
     %% Logger
-    log = SPMA_loggerSetUp("general");
+    logOptions = struct("LogFileDir", config.OutputFolder);
+    log = SPMA_loggerSetUp("general", logOptions);
 
     %% START
     log.info(">>> START MULTIVERSE ANALYSIS <<<")
@@ -40,6 +41,9 @@ function data = SPMA_runPipeline(pipelineJSON, data, opt)
 
     log.info(sprintf("Pipeline file: %s", pipelineJSON));
     log.info("\n"+jsonencode(pipeline, "PrettyPrint", true));
+
+    % Save pipeline
+    copyfile(pipelineJSON, config.OutputFolder)
 
     %% Starts the loop
     steps = fieldnames(pipeline);
@@ -59,7 +63,7 @@ function data = SPMA_runPipeline(pipelineJSON, data, opt)
             current_data = data{n_data};
             for variation = 1:n_multiverse
                 step_variation = step(variation);
-                log.info(sprintf(">> Variation: %d", variation))
+                log.info(sprintf(">> Universe: %d", variation))
                 
                 % Run the step
                 out = run_step(current_data, step_variation, config.OutputFolder);
@@ -97,6 +101,16 @@ function dataOut = run_step(dataIn, step, output)
     % Check if must be saved
     if isfield(step, "save")
         params.Save = step.save;
+    end
+
+    % Check if there are custom log params
+    if isfield(step, "log")
+        params = catStruct(params, step.log);
+        if ~isfield(step.log, "LogFileDir")
+            params.LogFileDir = output;
+        end
+    else
+        params.LogFileDir = output;
     end
     
     % Update output folder
