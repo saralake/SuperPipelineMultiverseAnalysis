@@ -78,12 +78,12 @@ function yesno = isEEGLAB(data)
     if isstruct(data)
         % get the name of the fields of data
         data_fields = fieldnames(data)';
-        % if there are less fields than the expected EEGLAB fields,
-        % something is missing, therefore it is not a valid EEGLAB
-        % structure
-        if length(data_fields) < length(EEGLAB_fields)
-            return
-        end
+%         % if there are less fields than the expected EEGLAB fields,
+%         % something is missing, therefore it is not a valid EEGLAB
+%         % structure
+%         if length(data_fields) < length(EEGLAB_fields)
+%             return
+%         end
         
         % It is an EEGLAB struct if all the EEGLAB fields are present in
         % the data structure
