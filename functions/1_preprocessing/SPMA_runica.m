@@ -66,7 +66,7 @@ function [EEG] = SPMA_runica(EEG, opt)
     %% Save
     if config.Save
         logParams = unpackStruct(logConfig);
-        SPMA_saveData(EEG, "Name", config.saveName, "Folder", module, "OutputFolder", config.OutputFolder, logParams{:});
+        SPMA_saveData(EEG, "Name", config.SaveName, "Folder", module, "OutputFolder", config.OutputFolder, logParams{:});
     end
 
 end

@@ -47,9 +47,9 @@ function [EEG] = SPMA_cleanData(EEG, opt)
     log = SPMA_loggerSetUp(module, logConfig);
     
     %% Cleaning data
-    log.info(sprintf("Cleaning data with %s parameters", config.Type))
+    log.info(sprintf("Cleaning data with %s parameters", config.Severity))
 
-    switch config.Type
+    switch config.Severity
         case "loose"
             flatlineCrit = 5;
             channelCrit = 0.8;
@@ -73,7 +73,7 @@ function [EEG] = SPMA_cleanData(EEG, opt)
             windowCritTol = [-Inf 7]; 
 
         otherwise
-            error("Available types are only 'loose' and 'strict'. %s not available.", config.Type)
+            error("Available types are only 'loose' and 'strict'. %s not available.", config.Severity)
     end
 
     EEG = pop_clean_rawdata(EEG, ...
@@ -91,7 +91,7 @@ function [EEG] = SPMA_cleanData(EEG, opt)
     %% Save
     if config.Save
         logParams = unpackStruct(logConfig);
-        SPMA_saveData(EEG, "Name", config.saveName, "Folder", module, "OutputFolder", config.OutputFolder, logParams{:});
+        SPMA_saveData(EEG, "Name", config.SaveName, "Folder", module, "OutputFolder", config.OutputFolder, logParams{:});
     end
 
 end

@@ -51,13 +51,13 @@ function [EEG] = SPMA_resample(EEG, opt)
     fs_old = EEG.srate;
     log.info(sprintf("Old sampling rate: %.1f", fs_old))
 
-    EEG = pop_resample( EEG, config.fs, config.EEGLAB{:});
-    log.info(sprintf("New sampling rate: %.1f", fs))
+    EEG = pop_resample( EEG, config.Frequency, config.EEGLAB{:});
+    log.info(sprintf("New sampling rate: %.1f", config.Frequency))
 
     %% Save
     if config.Save
         logParams = unpackStruct(logConfig);
-        SPMA_saveData(EEG, "Name", config.saveName, "Folder", module, "OutputFolder", config.OutputFolder, logParams{:});
+        SPMA_saveData(EEG, "Name", config.SaveName, "Folder", module, "OutputFolder", config.OutputFolder, logParams{:});
     end
 
 end
