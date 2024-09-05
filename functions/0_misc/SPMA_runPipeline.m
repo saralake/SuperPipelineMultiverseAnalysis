@@ -1,13 +1,12 @@
 % SPMA_RUNPIPELINE - Run a multiverse pipeline over a set of data.
 %
 % Usage:
-%     >> SPMA_runPipeline(data)
-%     >> SPMA_saveData(data, saveName)
-%     >> SPMA_saveData(data, saveName, saveFolder)
+%     >> SPMA_runPipeline(pipelineJSON, data)
+%     >> SPMA_runPipeline(pipelineJSON, data, "OutputFolder", output)
 %
 % Inputs:
-%    data        = [any] A set of data
-%    saveName    = [string] The name of the saved file (default: the name
+%    pipelineJSON = [string] A json file
+%    data    = [struct] The name of the saved file (default: the name
 %           of the calling function)
 %    saveFolder  = [string] The folder where to save the file (default: the
 %           name of the module of the calling function)
@@ -43,6 +42,9 @@ function data = SPMA_runPipeline(pipelineJSON, data, opt)
 
     log.info(sprintf("Pipeline file: %s", pipelineJSON));
     log.info("\n"+jsonencode(pipeline, "PrettyPrint", true));
+
+    logParams = unpackStruct(logOptions);
+    SPMA_drawPipeline(pipeline, "OutputFolder", config.OutputFolder, logParams{:})
 
     % Save pipeline
     copyfile(pipelineJSON, config.OutputFolder)

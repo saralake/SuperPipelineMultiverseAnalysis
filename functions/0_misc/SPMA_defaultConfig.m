@@ -42,6 +42,12 @@ general.customConfig.FileName = "SPMA_config.json"; % Name of the custom configu
 nowstr = string(datetime("now", "Format", "yyyyMMdd_HHmmss"));
 general.save.OutputFolder = fullfile(getCodeFolder(), "output", nowstr);
 
+% Image
+general.image.SaveDotFile = true;
+general.image.ImageFormat = ["png","svg"];
+general.image.ImageWidth = 0; %auto
+general.image.ImageHeight = 0; %auto
+
 % Logging
 general.logging.LogEnabled = true;
 general.logging.LogLevel = 2;
