@@ -45,6 +45,7 @@ general.save.OutputFolder = fullfile(getCodeFolder(), "output", nowstr);
 % Logging
 general.logging.LogEnabled = true;
 general.logging.LogLevel = 2;
+general.logging.LogToFile = false;
 general.logging.LogFileDir = getCodeFolder();
 general.logging.LogFileName = "SPMA.log";
 
@@ -106,6 +107,7 @@ preproc.runica.OutputFolder = "";
 % Logging
 preproc.logging.LogEnabled = true;
 preproc.logging.LogLevel = 2;
+preproc.logging.LogToFile = false;
 preproc.logging.LogFileDir = getCodeFolder();
 preproc.logging.LogFileName = "SPMA_preprocessing.log";
 
@@ -119,6 +121,7 @@ headModel = struct();
 % Logging
 headModel.logging.LogEnabled = true;
 headModel.logging.LogLevel = 2;
+headModel.logging.LogToFile = false;
 headModel.logging.LogFileDir = getCodeFolder();
 headModel.logging.LogFileName = "SPMA_headModel.log";
 
@@ -132,6 +135,7 @@ source = struct();
 % Logging
 source.logging.LogEnabled = true;
 source.logging.LogLevel = 2;
+source.logging.LogToFile = false;
 source.logging.LogFileDir = getCodeFolder();
 source.logging.LogFileName = "SPMA_sourceEstimation.log";
 
@@ -145,6 +149,7 @@ connectivity = struct();
 % Logging
 connectivity.logging.LogEnabled = true;
 connectivity.logging.LogLevel = 2;
+connectivity.logging.LogToFile = false;
 connectivity.logging.LogFileDir = getCodeFolder();
 connectivity.logging.LogFileName = "SPMA_connectivity.log";
 
@@ -159,6 +164,7 @@ network = struct();
 % Logging
 network.logging.LogEnabled = true;
 network.logging.LogLevel = 2;
+network.logging.LogToFile = false;
 network.logging.LogFileDir = getCodeFolder();
 network.logging.LogFileName = "SPMA_network.log";
 

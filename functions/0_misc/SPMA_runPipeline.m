@@ -28,7 +28,9 @@ function data = SPMA_runPipeline(pipelineJSON, data, opt)
     config = SPMA_loadConfig("general", "save", opt);
 
     %% Logger
-    logOptions = struct("LogFileDir", config.OutputFolder);
+    logOptions = struct( ...
+        "LogFileDir", config.OutputFolder, ...
+        "LogToFile", true);
     log = SPMA_loggerSetUp("general", logOptions);
 
     %% START
@@ -109,8 +111,12 @@ function dataOut = run_step(dataIn, step, output)
         if ~isfield(step.log, "LogFileDir")
             params.LogFileDir = output;
         end
+        if ~isfield(step.log, "LogToFile")
+            params.LogToFile = true;
+        end
     else
         params.LogFileDir = output;
+        params.LogToFile = true;
     end
     
     % Update output folder

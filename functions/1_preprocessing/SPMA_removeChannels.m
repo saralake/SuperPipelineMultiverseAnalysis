@@ -31,6 +31,7 @@ function [EEG] = SPMA_removeChannels(EEG, opt)
         % Log options
         opt.LogEnabled logical
         opt.LogLevel double {mustBeInteger,mustBeInRange(opt.LogLevel,0,6)}
+        opt.LogToFile logical
         opt.LogFileDir string
         opt.LogFileName string
     end
