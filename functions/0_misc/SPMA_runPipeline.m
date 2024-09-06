@@ -59,21 +59,25 @@ function data = SPMA_runPipeline(pipelineJSON, data, opt)
         step = pipeline.(steps{n_steps});
         log.info(sprintf("> Step: %d", n_steps))
         
-        n_multiverse = length(step);
-        log.info(sprintf("There are %d multiverses", n_multiverse))
+        l_multiverse = length(step);
+        log.info(sprintf("There are %d multiverses", l_multiverse))
 
         l_data = length(data);
         for n_data = 1:l_data
             current_data = data{n_data};
-            for variation = 1:n_multiverse
-                step_variation = step(variation);
-                log.info(sprintf(">> Universe: %d", variation))
+            for n_universe = 1:l_multiverse
+                if isstruct(step)
+                    universe = step(n_universe);
+                else %iscell
+                    universe = step{n_universe};
+                end
+                log.info(sprintf(">> Universe: %d", n_universe))
                 
                 % Run the step
-                out = run_step(current_data, step_variation, config.OutputFolder);
+                out = run_step(current_data, universe, config.OutputFolder);
 
                 % Save the output in our data array
-                idx = n_data + (variation-1)*l_data;
+                idx = n_data + (n_universe-1)*l_data;
                 data{idx} = out;
 
             end % variation

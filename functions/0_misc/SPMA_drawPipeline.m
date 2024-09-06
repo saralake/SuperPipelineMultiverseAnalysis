@@ -65,7 +65,11 @@ function SPMA_drawPipeline(pipeline, saveName, opt)
         step = pipeline.(steps{n_step});
         curr_universes = {};
         for n_universe = 1:length(step)
-            universe = getName(step(n_universe), "SPMA_");
+            if isstruct(step)
+                universe = getName(step(n_universe), "SPMA_");
+            else %is a cell array
+                universe = getName(step{n_universe}, "SPMA_");
+            end
             curr_universes{n_universe} = universe;
             node = sprintf('%s [label="%s"];\n', universe, universe);
             nodes = nodes + node;
