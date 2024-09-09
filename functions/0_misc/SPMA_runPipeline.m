@@ -36,9 +36,12 @@ function data = SPMA_runPipeline(pipelineJSON, data, opt)
     log.info(">>> START MULTIVERSE ANALYSIS <<<")
 
     %% Load pipeline
+    log.info("Validate pipeline...")
+    SPMA_validatePipeline(pipelineJSON);
+    log.info("...Pipeline is valid!")
+
     pipeline_str = fileread(pipelineJSON);
     pipeline = jsondecode(pipeline_str);
-    % TODO: Check pipeline
 
     log.info(sprintf("Pipeline file: %s", pipelineJSON));
     log.info("\n"+jsonencode(pipeline, "PrettyPrint", true));
@@ -54,7 +57,9 @@ function data = SPMA_runPipeline(pipelineJSON, data, opt)
     log.info(sprintf("There are %d steps", length(steps)))
 
     data = {data};
+    names = {''};
 
+    % Loop over the steps
     for n_steps = 1:length(steps)
         step = pipeline.(steps{n_steps});
         log.info(sprintf("> Step: %d", n_steps))
@@ -63,8 +68,15 @@ function data = SPMA_runPipeline(pipelineJSON, data, opt)
         log.info(sprintf("There are %d multiverses", l_multiverse))
 
         l_data = length(data);
+
+        % Loop over the data
         for n_data = 1:l_data
+
+            % Extract current data
             current_data = data{n_data};
+            current_name = names{n_data};
+
+            % Loop over the universes
             for n_universe = 1:l_multiverse
                 if isstruct(step)
                     universe = step(n_universe);
@@ -72,15 +84,23 @@ function data = SPMA_runPipeline(pipelineJSON, data, opt)
                     universe = step{n_universe};
                 end
                 log.info(sprintf(">> Universe: %d", n_universe))
-                
+    
                 % Run the step
-                out = run_step(current_data, universe, config.OutputFolder);
-
+                out = run_step(current_data, universe, config.OutputFolder, current_name);
+    
                 % Save the output in our data array
                 idx = n_data + (n_universe-1)*l_data;
                 data{idx} = out;
-
-            end % variation
+                % If multiverse add name to identify dataset
+                if l_multiverse > 1
+                    if isempty(current_name)
+                        names{idx} = getStepName(universe);
+                    else
+                        names{idx} = sprintf("%s_%s", current_name, getStepName(universe));
+                    end
+                end
+                log.warning(sprintf("****** %s", getStepName(universe)))
+            end % n_universe
         end % n_data
     end % n_steps
 
@@ -89,7 +109,7 @@ function data = SPMA_runPipeline(pipelineJSON, data, opt)
 
 end
 
-function dataOut = run_step(dataIn, step, output)
+function dataOut = run_step(dataIn, step, output, prevName)
 
     % Check if there are custom params
     if isfield(step, "params")
@@ -99,12 +119,13 @@ function dataOut = run_step(dataIn, step, output)
     end
     
     % Check if there is a custom name
-    if isfield(step, "name")
-        name = step.name;
+    name = getStepName(step);
+
+    if isempty(prevName)
+        params.SaveName = name;
     else
-        name = step.function;
+        params.SaveName = sprintf("%s_%s", prevName, name);
     end
-    params.SaveName = name;
     
     % Check if must be saved
     if isfield(step, "save")
@@ -136,6 +157,22 @@ function dataOut = run_step(dataIn, step, output)
     
     % Execute the step
     dataOut = fun(dataIn, cellParams{:});
+%     dataOut = sprintf("%s_%s", dataIn, params.SaveName);
 
 end
 
+function name = getStepName(step)
+% Check if there is a custom name
+    if isfield(step, "name")
+        name = step.name;
+    else
+        name = step.function;
+    end
+    name = cleanName(name);
+end
+
+function name = cleanName(name)
+    notAllowedChars = {' ', '_'};
+    cleanChar = '-';
+    name = replace(name, notAllowedChars, cleanChar);
+end
