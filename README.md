@@ -34,7 +34,7 @@ Moreover it is built over different open source packages:
 
 | Package   | Version  |
 | ---       | ---      |
-| [EEGLAB](https://github.com/sccn/eeglab) | 2024.1 |
+| [EEGLAB](https://github.com/sccn/eeglab) | 2024.2 |
 
 The external dependencies are included as submodules in the folder `external`
 
@@ -47,54 +47,54 @@ The pipeline is defined with a json file. The structure of the file is the follo
 
 ```json
 {
-	"step1": {
-		"name": "downsampling",
-        "function": "SPMA_resample",
-        "save": true,
-		"params": [
-			{
-				"Frequency": 500,
-			}
-		]
-	},
-	"step2": {
-		"function": "SPMA_filter",
-		"params": []
-	},
-	"step3": [
-		{
-            "function": "SPMA_ica",
-            "name": "ica1",
-			"params": [
-				{
-					"param_ica": 10
-				}
-			]
-		},
-		{
-            "function": "SPMA_ica",
-            "name": "ica2",
-			"params": [
-				{
-					"param_pca": 20
-				}
-			]
-		}
-	],
-    "step4": [
-        {
-            "function": "SPMA_source"
-            "name": "source1",
-        },
-        {
-            "function": "SPMA_source"
-            "name": "source2",
-        },
-        {
-            "function": "SPMA_source"
-            "name": "source3",
-        }
+  "step1": {
+    "name": "downsampling",
+    "function": "SPMA_resample",
+    "save": true,
+    "params": [
+      {
+        "Frequency": 500,
+      }
     ]
+  },
+  "step2": {
+    "function": "SPMA_filter",
+    "params": []
+  },
+  "step3": [
+    {
+      "function": "SPMA_ica",
+      "name": "ica1",
+      "params": [
+        {
+          "param_ica": 10
+        }
+      ]
+    },
+    {
+      "function": "SPMA_ica",
+      "name": "ica2",
+      "params": [
+        {
+          "param_pca": 20
+        }
+      ]
+    }
+  ],
+  "step4": [
+    {
+      "function": "SPMA_source",
+      "name": "source1"
+    },
+    {
+      "function": "SPMA_source",
+      "name": "source2"
+    },
+    {
+      "function": "SPMA_source",
+      "name": "source3"
+    }
+  ]
 }
 ```
 
