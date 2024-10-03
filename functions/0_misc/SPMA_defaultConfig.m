@@ -61,6 +61,11 @@ config.general = general;
 preproc = struct();
 
 % All the configurations
+preproc.import.EEGLAB = {};
+preproc.import.Save = false;
+preproc.import.SaveName = "resample"; 
+preproc.import.OutputFolder = "";
+
 preproc.resample.Frequency = 250;     % [Hz] Sample frequency for resampling
 preproc.resample.EEGLAB = {};
 preproc.resample.Save = false;        % 
